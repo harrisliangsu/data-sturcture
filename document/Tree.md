@@ -156,20 +156,68 @@
                         }
                     }
                     
+                    // 在左子树中搜索
                     private BinaryNode<AnyType> findMin(BinaryNode<AnyType> t){
-                        
+                        if(t == null){
+                            return null;
+                        }else if(t.left == null){
+                            return t;
+                        }else{
+                            return findMin(t.left);
+                        }
                     }
                     
+                    // 在右子树中搜索
                     private BinaryNode<AnyType> findMax(BinaryNode<AnyType> t){
-                        
+                        if(t != null){
+                            if(t.right != null){
+                                return findMax(t.right);
+                            }else{
+                                return t;
+                            }
+                        }else{
+                            return null;
+                        }
                     }
                     
+                    // 与左右节点比较,插到路径的最后
                     private BinaryNode<AnyType> insert(AnyType x,BinaryNode<AnyType> t){
-                        
+                        if(t == null){
+                            return new BinaryBode<>(x,null,null);
+                        }else{
+                            int compareResult = x.compareTo(t.element);
+                            if(compareResult < 0){
+                                t.left = insert(x,t.left);
+                            }else if(compareResult > 0){
+                                t.right = insert(x,t.right);
+                            }else{
+                                // Duplicate; do nothing
+                            }
+                        }
+                        return t;
                     }
                     
+                    // 1.叶子节点: 直接删除
+                    // 2.有子节点
+                    // 懒惰删除(优点: 删除高效,节省插入重复元素空间 缺点: 标记为删除的元素越来越多,占用空间越来越大)
                     private BinaryNode<AnyType> remove(AnyType x,BinaryNode<AnyType> t){
-                        
+                        if(t == null){
+                            return t;
+                        }else{
+                            int compareResult = x.compareTo(t.element);
+                            if(compareResult < 0 ){
+                                t.right = remove(x,t.right);
+                            }else if(compareResult > 0){
+                                t.right = remove(x,t.right);
+                            }else if(t.left != null && t.right != null){
+                                // 有两个孩子时,找一个右子树中最小节点替代删除的节点
+                                t.element = findMin(t.right).element;
+                                t.right = remove(t.element,t.right);
+                            }else{
+                                t = (t.left != null) ? t.left : t.right;
+                            }
+                            return t;
+                        }
                     }
                     
                     private void printTree(BinaryNode<AnyType> t){
@@ -177,3 +225,13 @@
                     }
                 }
         
+### **AVL树**
+AVL(Adelson-Velskii和Landis)树是带有平衡条件的二叉树查找树.这个平衡条件必须容易保持,而且它保证树的深度必须是O(log N).
+1. 平衡条件eg: 
+    - 左右子树具有相同高度(容易满足)
+    - 每个节点都必须有相同高度的左子树和右子树(严格)
+2. 定义: 一颗AVL树是其每个节点的左子树和右子树的高度最多差1的二叉查找树(空树高度定义为-1)
+3. 性质: 在高度为h的AVL树中,最少节点数S(h): S(h)=S(h-1)+S(h-2)+1 --> 一个AVL树的高度最多为1.44log(N+2)-1.328(实际上的高度只略大于log N).
+4. 旋转
+    - 背景: 插入新节点时可能会破坏原节点的平衡条件
+    - 
