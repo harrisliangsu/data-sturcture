@@ -91,7 +91,7 @@
             <p align="center">
                 <img src="https://github.com/mmflys/data-sturcture/blob/master/info/graph/binarySearchTree.png">
             </p>
-        - [实现](https://github.com/mmflys/data-sturcture/blob/master/)
+        - [实现](https://github.com/mmflys/data-sturcture/blob/master/src/main/java/com/mmflys/datastructure/tree/BinarySearchTree.java)
         
 ### **AVL树**
 AVL(Adelson-Velskii和Landis)树是带有平衡条件的二叉树查找树.这个平衡条件必须容易保持,而且它保证树的深度必须是O(log N).
