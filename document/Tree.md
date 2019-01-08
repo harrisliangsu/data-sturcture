@@ -13,7 +13,7 @@
 
 4. 图例
     <p align="center">
-        <img src="">
+        <img src="https://github.com/mmflys/data-sturcture/blob/master/info/graph/tree.png">
     </p>
         
 5. 代码实现:
