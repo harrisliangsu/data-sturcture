@@ -275,6 +275,9 @@ AVL(Adelson-Velskii和Landis)树是带有平衡条件的二叉树查找树.这�
         - 图例:
             [双旋转](https://github.com/mmflys/data-sturcture/blob/master/document/Tree.md)
             <p align="center">
-                <img src="https://github.com/mmflys/data-sturcture/blob/master/info/graph/doubleRotate.png">
+                <img src="https://github.com/mmflys/data-sturcture/blob/master/info/graph/rightLeftDoubleRotate.png">
+                <p align="center">右-左双旋</p>
+                <img src="https://github.com/mmflys/data-sturcture/blob/master/info/graph/leftRightDoubleRotate.png">
+                <p align="center">左-右双旋</p>
             </p>
         
