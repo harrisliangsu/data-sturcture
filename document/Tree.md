@@ -132,4 +132,6 @@ AVL(Adelson-Velskii和Landis)树是带有平衡条件的二叉树查找树.这�
                 <img src="https://github.com/mmflys/data-sturcture/blob/master/info/graph/leftRightDoubleRotate.png">
                 <p align="center">左-右双旋</p>
             </p>
-        
+
+### **伸展树**
+1.

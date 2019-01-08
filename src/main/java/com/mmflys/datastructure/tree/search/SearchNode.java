@@ -1,14 +1,13 @@
 package com.mmflys.datastructure.tree.search;
 
+import com.mmflys.datastructure.tree.binary.BinaryNode;
+
 /**
  * @Author: Shark Chili
  * @Email: sharkchili.su@gmail.com
  * @Date: 2019/1/8 0008
  */
-public class SearchNode<AnyType extends Comparable<? super AnyType>> {
-	AnyType element;
-	SearchNode<AnyType> left;
-	SearchNode<AnyType> right;
+public class SearchNode<AnyType extends Comparable<? super AnyType>> extends BinaryNode<AnyType> {
 
 	SearchNode(AnyType theElement) {
 		this(theElement, null, null);
@@ -72,9 +71,9 @@ public class SearchNode<AnyType extends Comparable<? super AnyType>> {
 		} else {
 			int compareResult = x.compareTo(t.element);
 			if (compareResult < 0) {
-				return contains(x, t.left);
+				return contains(x, (SearchNode<AnyType>) t.left);
 			} else if (compareResult > 0) {
-				return contains(x, t.right);
+				return contains(x, (SearchNode<AnyType>) t.right);
 			} else {
 				return true;
 			}
@@ -88,7 +87,7 @@ public class SearchNode<AnyType extends Comparable<? super AnyType>> {
 		} else if (t.left == null) {
 			return t;
 		} else {
-			return findMin(t.left);
+			return findMin((SearchNode<AnyType>) t.left);
 		}
 	}
 
@@ -96,7 +95,7 @@ public class SearchNode<AnyType extends Comparable<? super AnyType>> {
 	private SearchNode<AnyType> findMax(SearchNode<AnyType> t) {
 		if (t != null) {
 			if (t.right != null) {
-				return findMax(t.right);
+				return findMax((SearchNode<AnyType>) t.right);
 			} else {
 				return t;
 			}
@@ -112,9 +111,9 @@ public class SearchNode<AnyType extends Comparable<? super AnyType>> {
 		} else {
 			int compareResult = x.compareTo(t.element);
 			if (compareResult < 0) {
-				t.left = insert(x, t.left);
+				t.left = insert(x, (SearchNode<AnyType>) t.left);
 			} else if (compareResult > 0) {
-				t.right = insert(x, t.right);
+				t.right = insert(x, (SearchNode<AnyType>) t.right);
 			} else {
 				// Duplicate; do nothing
 			}
@@ -131,15 +130,15 @@ public class SearchNode<AnyType extends Comparable<? super AnyType>> {
 		} else {
 			int compareResult = x.compareTo(t.element);
 			if (compareResult < 0) {
-				t.right = remove(x, t.right);
+				t.right = remove(x, (SearchNode<AnyType>) t.right);
 			} else if (compareResult > 0) {
-				t.right = remove(x, t.right);
+				t.right = remove(x, (SearchNode<AnyType>) t.right);
 			} else if (t.left != null && t.right != null) {
 				// 有两个孩子时,找一个右子树中最小节点替代删除的节点
-				t.element = findMin(t.right).element;
-				t.right = remove(t.element, t.right);
+				t.element = findMin((SearchNode<AnyType>) t.right).element;
+				t.right = remove(t.element, (SearchNode<AnyType>) t.right);
 			} else {
-				t = (t.left != null) ? t.left : t.right;
+				t = (SearchNode<AnyType>) ((t.left != null) ? t.left : t.right);
 			}
 			return t;
 		}

@@ -5,6 +5,8 @@ package com.mmflys.datastructure.tree.binary;
  * @Email: sharkchili.su@gmail.com
  * @Date: 2019/1/8 0008
  */
-public class BinaryNode {
-
+public class BinaryNode<AnyType> {
+	public AnyType element;
+	public BinaryNode<AnyType> left;
+	public BinaryNode<AnyType> right;
 }

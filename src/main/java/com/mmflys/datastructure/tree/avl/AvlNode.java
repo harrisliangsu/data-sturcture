@@ -1,17 +1,16 @@
 package com.mmflys.datastructure.tree.avl;
 
+import com.mmflys.datastructure.tree.search.SearchNode;
+
 /**
  * @Author: Shark Chili
  * @Email: sharkchili.su@gmail.com
  * @Date: 2019/1/8 0008
  */
-public class AvlNode<AnyType extends Comparable<? super AnyType>> {
+public class AvlNode<AnyType extends Comparable<? super AnyType>> extends SearchNode<AnyType> {
 
 	private static final int ALLOWED_IMBALANCE = 1;
 
-	AnyType element;
-	AvlNode<AnyType> left;
-	AvlNode<AnyType> right;
 	int height;
 
 	public AvlNode(AnyType theElement) {
@@ -29,15 +28,21 @@ public class AvlNode<AnyType extends Comparable<? super AnyType>> {
 		return t == null ? -1 : t.height;
 	}
 
+	/**
+	 * 直接插入,然后再平衡
+	 * @param x 插入的元素
+	 * @param t 根节点
+	 * @return 新树
+	 */
 	private AvlNode<AnyType> insert(AnyType x, AvlNode<AnyType> t) {
 		if (t == null) {
 			return new AvlNode<AnyType>(x, null, null);
 		} else {
 			int compareResult = x.compareTo(t.element);
 			if (compareResult < 0) {
-				t.left = insert(x, t.left);
+				t.left = insert(x, (AvlNode<AnyType>) t.left);
 			} else if (compareResult > 0) {
-				t.right = insert(x, t.right);
+				t.right = insert(x, (AvlNode<AnyType>) t.right);
 			} else {
 				// Duplicate; do nothing
 			}
@@ -54,20 +59,20 @@ public class AvlNode<AnyType extends Comparable<? super AnyType>> {
 	private AvlNode<AnyType> balance(AvlNode<AnyType> t) {
 		if (t == null) {
 			return null;
-		} else if (height(t.left) - height(t.right) > ALLOWED_IMBALANCE) {
-			if (height(t.left.left) >= height(t.left.right)) {
+		} else if (height((AvlNode<AnyType>) t.left) - height((AvlNode<AnyType>) t.right) > ALLOWED_IMBALANCE) {
+			if (height((AvlNode<AnyType>) t.left.left) >= height((AvlNode<AnyType>) t.left.right)) {
 				t = rotateWithLeftChild(t);
 			} else {
 				t = rotateWithRightChild(t);
 			}
-		} else if (height(t.right) - height(t.left) > ALLOWED_IMBALANCE) {
-			if (height(t.right.right) >= height(t.right.left)) {
+		} else if (height((AvlNode<AnyType>) t.right) - height((AvlNode<AnyType>) t.left) > ALLOWED_IMBALANCE) {
+			if (height((AvlNode<AnyType>) t.right.right) >= height((AvlNode<AnyType>) t.right.left)) {
 				t = rotateWithRightChild(t);
 			} else {
 				t = doubleWithRightChild(t);
 			}
 		}
-		t.height = Math.max(height(t.left), height(t.right)) + 1;
+		t.height = Math.max(height((AvlNode<AnyType>) t.left), height((AvlNode<AnyType>) t.right)) + 1;
 		return t;
 	}
 
@@ -78,7 +83,7 @@ public class AvlNode<AnyType extends Comparable<? super AnyType>> {
 	 * @return 新树
 	 */
 	private AvlNode<AnyType> doubleWithRightChild(AvlNode<AnyType> k3) {
-		k3.left = rotateWithRightChild(k3.left);
+		k3.left = rotateWithRightChild((AvlNode<AnyType>) k3.left);
 		return rotateWithLeftChild(k3);
 	}
 
@@ -89,11 +94,11 @@ public class AvlNode<AnyType extends Comparable<? super AnyType>> {
 	 * @return 新树
 	 */
 	private AvlNode<AnyType> rotateWithRightChild(AvlNode<AnyType> k2) {
-		AvlNode<AnyType> k1 = k2.right;
+		AvlNode<AnyType> k1 = (AvlNode<AnyType>) k2.right;
 		k2.right = k1.left;
 		k1.left = k2;
-		k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
-		k1.height = Math.max(height(k1.right), k2.height) + 1;
+		k2.height = Math.max(height((AvlNode<AnyType>) k2.left), height((AvlNode<AnyType>) k2.right)) + 1;
+		k1.height = Math.max(height((AvlNode<AnyType>) k1.right), k2.height) + 1;
 		return k1;
 	}
 
@@ -104,28 +109,35 @@ public class AvlNode<AnyType extends Comparable<? super AnyType>> {
 	 * @return 新树
 	 */
 	private AvlNode<AnyType> rotateWithLeftChild(AvlNode<AnyType> k2) {
-		AvlNode<AnyType> k1 = k2.left;
+		AvlNode<AnyType> k1 = (AvlNode<AnyType>) k2.left;
 		k2.left = k1.right;
 		k1.right = k2;
-		k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
-		k1.height = Math.max(height(k1.left), k2.height) + 1;
+		k2.height = Math.max(height((AvlNode<AnyType>) k2.left), height((AvlNode<AnyType>) k2.right)) + 1;
+		k1.height = Math.max(height((AvlNode<AnyType>) k1.left), k2.height) + 1;
 		return k1;
 	}
 
+	/**
+	 * 1.若同时有左右儿子,则用右儿子最小节点替代被移除节点位置
+	 * 2.若一个儿子为空,则直用非空子节点替代被移除节点位置
+	 * @param x 移除的值
+	 * @param t 根节点
+	 * @return 新树
+	 */
 	private AvlNode<AnyType> remove(AnyType x, AvlNode<AnyType> t) {
 		if (t == null) {
 			return null;
 		} else {
 			int compareResult = x.compareTo(t.element);
 			if (compareResult < 0) {
-				t.left = remove(x, t.left);
+				t.left = remove(x, (AvlNode<AnyType>) t.left);
 			} else if (compareResult > 0) {
-				t.right = remove(x, t.right);
+				t.right = remove(x, (AvlNode<AnyType>) t.right);
 			} else if (t.left != null && t.right != null) {
-				t.element = findMin(t.right).element;
-				t.right = remove(t.element, t.right);
+				t.element = findMin((AvlNode<AnyType>) t.right).element;
+				t.right = remove(t.element, (AvlNode<AnyType>) t.right);
 			} else {
-				t = (t.left != null) ? t.left : t.right;
+				t = (AvlNode<AnyType>) ((t.left != null) ? t.left : t.right);
 			}
 			return balance(t);
 		}
@@ -138,7 +150,7 @@ public class AvlNode<AnyType extends Comparable<? super AnyType>> {
 		} else if (t.left == null) {
 			return t;
 		} else {
-			return findMin(t.left);
+			return findMin((AvlNode<AnyType>) t.left);
 		}
 	}
 }
