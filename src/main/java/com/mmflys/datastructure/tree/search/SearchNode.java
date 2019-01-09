@@ -145,6 +145,11 @@ public class SearchNode<AnyType extends Comparable<? super AnyType>> extends Bin
 	}
 
 	private void printTree(SearchNode<AnyType> t) {
-
+		if (t!=null) {
+			// 中序遍历
+			printTree((SearchNode<AnyType>) t.left);
+			System.out.println(t.element);
+			printTree((SearchNode<AnyType>) t.right);
+		}
 	}
 }
